@@ -5,9 +5,10 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-// Route for the index (login)
+// Routes for the index (login)
 $routes->get('/', 'Home::index');
+$routes->post('user/authenticate', 'User::authenticate');
 
 // Routes for the sign up
-$routes->get('users/signup', 'User::index');
-$routes->post('users/signup/(:num)', 'User::store/$1');
+$routes->get('users/index', 'User::index');
+$routes->post('users/index/(:num)', 'User::store/$1');

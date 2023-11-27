@@ -1,0 +1,9 @@
+# .gitignore
+
+# CodeIgniter 4
+writable/*
+!writable/.gitkeep
+debugbar/*
+!debugbar/.gitkeep
+logs/*
+!logs/.gitkeep

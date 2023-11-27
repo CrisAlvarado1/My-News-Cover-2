@@ -6,6 +6,7 @@ class Home extends BaseController
 {
     public function index(): string
     {
+        helper('form');
         $data['title'] = "Login";
         return view('templates/navBar', $data)
             . view('index')

@@ -5,7 +5,7 @@
                 <h1 class="mb-1 font-weight-normal text-muted display-6">User Registration</h1>
                 <?= session()->getFlashdata('error') ?>
                 <?= validation_list_errors() ?>
-                <form action="<?php echo site_url('users/signup/' . $role['id']); ?>" method="post" class="form-inline" role="form" id="registerForm">
+                <form action="<?php echo site_url('users/index/' . $role['id']); ?>" method="post" class="form-inline" role="form" id="registerForm">
                     <?= csrf_field() ?>
                     <div class="form-group mb-4">
                         <hr class="hr-light">
@@ -66,4 +66,4 @@
             </div>
         </div>
 </section>
-<script src="/js/validateSignUp.js"></script>
+<script src="js/validateSignUp.js"></script>

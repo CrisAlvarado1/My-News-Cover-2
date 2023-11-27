@@ -37,4 +37,21 @@ class UserModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    // Validates if the email already exists
+    public function isEmailExists($email)
+    {
+        return $this->where('email', $email)->countAllResults() > 0;
+    }
+
+    public function getByEmail($email)
+    {
+        return $this->where('email', $email)->first();
+    }
+
+    public function isAdmin($userId)
+    {
+        $user = $this->find($userId);
+        return $user && $user['role_id'] == 1;
+    }
 }
