@@ -10,6 +10,7 @@ use App\Models\UserModel;
 
 class User extends BaseController
 {
+
     public function index()
     {
         $countryModel  = model(CountryModel::class);
@@ -32,8 +33,8 @@ class User extends BaseController
 
         $userData = [
             'email'        => $this->request->getVar('email'),
-            'first_name'   => $this->request->getVar('lastName'),
-            'last_name'    => $this->request->getVar('email'),
+            'first_name'   => $this->request->getVar('firstName'),
+            'last_name'    => $this->request->getVar('lastName'),
             'role_id'      => $roleId,
             'password'     => $this->request->getVar('password'),
             'phone_number' => $this->request->getVar('phone')
@@ -72,51 +73,5 @@ class User extends BaseController
         $headers  = "De: sender\'s email";
 
         mail($to_email, $subject, $body, $headers);
-    }
-
-    public function authenticate()
-    {
-        $validation = \Config\Services::validation();
-
-        $validation->setRules([
-            'email'    => 'required|valid_email',
-            'password' => 'required',
-        ]);
-
-        if (!$validation->withRequest($this->request)->run()) {
-            return redirect()->to('/')->withInput()->with('errors', $validation->getErrors());
-        }
-
-        $userModel    = model(UserModel::class);
-        $userEmail    = $this->request->getVar('email');
-        $userPassword = $this->request->getVar('password');
-
-        $user = $userModel->getByEmail($userEmail);
-
-        if (!$user || $userPassword !== $user['password']) {
-            return redirect()->to('/')->with('error', 'Invalid email or password');
-        }
-
-        $this->setSession($user);
-        if ($userModel->isAdmin($user['id'])) {
-            // return redirect()->to('/'); // dirección a categorias
-            echo "Admiiiin";
-        } else {
-            // return redirect()->to('/'); // dirección a dashboard
-            echo "Usuarioooooooooo";
-        }
-    }
-
-    private function setSession($user)
-    {
-        $role = ($user['role_id'] == 1) ? 'admin' : 'user';
-
-        $session = session();
-        $session->set([
-            'user_id' => $user['id'],
-            'email'   => $user['email'],
-            'role'    => $role,
-            'name'    => $user['first_name']
-        ]);
     }
 }
