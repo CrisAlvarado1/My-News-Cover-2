@@ -1,0 +1,76 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Controllers\BaseController;
+use App\Models\CategoryModel;
+use App\Models\NewsSourcesModel;
+
+class NewsSources extends BaseController
+{
+
+    protected $filters = ['auth'];
+
+    public function index()
+    {
+        $newsSourcesModel    = Model(NewsSourcesModel::class);
+        $data['title']       = 'News Sources';
+        $userId              = session()->get('user_id');
+        $data['newsSources'] = $newsSourcesModel->getNewsSourcesByUserId($userId);
+        $content             = view('users/newsSources/index', $data);
+
+        return parent::renderTemplate($content, $data);
+    }
+
+    public function create()
+    {
+        $categoryModel       = Model(CategoryModel::class);
+        $data['title']       = 'New - News Sources';
+        $data['actionTitle'] = 'Create News Sources';
+        $data['categories']  = $categoryModel->findAll();
+        $content             = view('users/newsSources/form', $data);
+
+        return parent::renderTemplate($content, $data);
+    }
+
+    public function edit($id)
+    {
+        $newsSourcesModel = Model(NewsSourcesModel::class);
+        $categoryModel    = Model(CategoryModel::class);
+
+        $data['title']       = 'Edit - News Sources';
+        $data['actionTitle'] = 'Edit News Sources';
+        $data['categories']  = $categoryModel->findAll();
+        $data['newsSource']  = $newsSourcesModel->where('id', $id)->first();
+        $content             = view('users/newsSources/form', $data);
+
+        return parent::renderTemplate($content, $data);
+    }
+
+    // insert / update data
+    public function save()
+    {
+        $newsSourcesModel = Model(NewsSourcesModel::class);
+        $id = $this->request->getVar('id');
+        $data = [
+            'name'        => $this->request->getVar('name'),
+            'url'         => $this->request->getVar('url'),
+            'category_id' => $this->request->getVar('category'),
+            'user_id'     => session()->get('user_id')
+        ];
+        if ($id) {
+            $newsSourcesModel->update($id, $data);
+        } else {
+            $newsSourcesModel->insert($data);
+        }
+        return $this->response->redirect(site_url('users/newsSources/index'));
+    }
+
+    public function delete($id = null)
+    {
+        $newsSourcesModel = Model(NewsSourcesModel::class);
+        $newsSourcesModel->where('id', $id)->delete();
+
+        return $this->response->redirect(site_url('users/newsSources/index'));
+    }
+}

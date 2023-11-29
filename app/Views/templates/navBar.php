@@ -32,8 +32,8 @@
                                 <?php endif; ?>
                                 <!-- Dropdown options for the normal user: -->
                                 <?php if ($session->get('role') === 'user') : ?>
-                                    <a class="dropdown-item" href="<?php echo site_url('') ?>">News Sources</a>
-                                    <a class="dropdown-item" href="<?php echo site_url('') ?>">My Cover</a>
+                                    <a class="dropdown-item" href="<?php echo site_url('users/newsSources/index') ?>">News Sources</a>
+                                    <a class="dropdown-item" href="<?php echo site_url('users/news/index') ?>">My Cover</a>
                                 <?php endif; ?>
                             <?php } else { ?>
                                 <a class="dropdown-item" href="<?php echo site_url('/') ?>">Login</a>

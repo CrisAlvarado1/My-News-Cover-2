@@ -19,6 +19,16 @@ $routes->post('users/index/(:num)', 'User::store/$1');
 // Routes for the categories (admin area)
 $routes->get('admin/index', 'Category::index');
 $routes->get('admin/create', 'Category::create');
+$routes->post('admin/save', 'Category::save');
 $routes->get('admin/edit/(:num)', 'Category::edit/$1');
 $routes->get('admin/delete/(:num)', 'Category::delete/$1');
-$routes->post('admin/save', 'Category::save');
+
+// Routes for the "Portada"
+$routes->get('users/news/index', 'News::index');
+
+// Routes for the news sources
+$routes->get('users/newsSources/index', 'NewsSources::index');
+$routes->get('users/newsSources/create', 'NewsSources::create');
+$routes->post('users/newsSources/save', 'NewsSources::save');
+$routes->get('users/newsSources/edit/(:num)', 'NewsSources::edit/$1');
+$routes->get('users/newsSources/delete/(:num)', 'NewsSources::delete/$1');

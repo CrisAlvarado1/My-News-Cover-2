@@ -32,11 +32,9 @@ class Auth extends BaseController
 
         $data['session'] = $this->setSession($user);
         if ($userModel->isAdmin($user['id'])) {
-            // dirección a categorias
             return redirect()->to('admin/index');
         } else {
-            // dirección a dashboard
-            echo "Usuarioooooooooo";
+            return redirect()->to('users/news/index');
         }
     }
 
