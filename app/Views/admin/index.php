@@ -21,8 +21,8 @@
                                 <th>
                                     <div class="d-flex justify-content-around">
                                         <!-- Link to edit or delete the category, using the category's ID -->
-                                        <a class="btn btn-secondary btn-sm" href="<?php echo $category['id']  ?>">Edit</a>
-                                        <a class="btn btn-danger btn-sm deleteLink" href="<?php echo $category['id']  ?>">Delete</a>
+                                        <a class="btn btn-secondary btn-sm" href="<?php echo site_url(['admin', 'edit', $category['id']]); ?>">Edit</a>
+                                        <a class="btn btn-danger btn-sm deleteLink" href="<?php echo site_url(['admin', 'delete', $category['id']]); ?>">Delete</a>
                                     </div>
                                 </th>
                             </tr>
@@ -33,8 +33,8 @@
         </div>
     </div>
     <div class="mt-3 mb-4">
-        <a class="btn btn-secondary px-5" href="add.php" role="button">Add new</a>
+        <a class="btn btn-secondary px-5" href="<?php echo site_url('admin/create') ?>" role="button">Add new</a>
     </div>
 </div>
-<script src="/JS/confirmDelete.js"></script>
-<script src="/JS/alerts.js"></script>
+<script src="/js/confirmDelete.js"></script>
+<script src="/js/alerts.js"></script>

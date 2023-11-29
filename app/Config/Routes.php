@@ -18,3 +18,7 @@ $routes->post('users/index/(:num)', 'User::store/$1');
 
 // Routes for the categories (admin area)
 $routes->get('admin/index', 'Category::index');
+$routes->get('admin/create', 'Category::create');
+$routes->get('admin/edit/(:num)', 'Category::edit/$1');
+$routes->get('admin/delete/(:num)', 'Category::delete/$1');
+$routes->post('admin/save', 'Category::save');

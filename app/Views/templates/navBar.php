@@ -28,7 +28,7 @@
                                 <a class="dropdown-item" href="<?php echo site_url('logout') ?>">Logout</a>
                                 <!-- Dropdown options for the administrator user: -->
                                 <?php if ($session->get('role')  === 'admin') : ?>
-                                    <a class="dropdown-item" href="<?php echo site_url('') ?>">Categories</a>
+                                    <a class="dropdown-item" href="<?php echo site_url('admin/index') ?>">Categories</a>
                                 <?php endif; ?>
                                 <!-- Dropdown options for the normal user: -->
                                 <?php if ($session->get('role') === 'user') : ?>
