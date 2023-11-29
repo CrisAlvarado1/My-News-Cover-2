@@ -13,17 +13,16 @@ class User extends BaseController
 
     public function index()
     {
+        helper('form');
         $countryModel  = model(CountryModel::class);
         $roleModel     = model(RoleModel::class);
 
         $data['title']     = "Sign Up";
         $data['countries'] = $countryModel->findAll();
         $data['role']      = $roleModel->where('name', 'user')->first();
+        $content           = view('users/index', $data);
 
-        helper('form');
-        return view('templates/navBar', $data)
-            . view('users/index', $data)
-            . view('templates/footer');
+        return parent::renderTemplate($content, $data);
     }
 
     public function store($roleId)

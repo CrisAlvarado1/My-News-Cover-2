@@ -55,4 +55,16 @@ abstract class BaseController extends Controller
 
         // E.g.: $this->session = \Config\Services::session();
     }
+
+    public function renderTemplate($view, $parameters = [])
+    {
+        if (session()->is_logged) {
+            $parameters['session'] = session();
+        }
+
+        echo view('templates/head',   $parameters);
+        echo view('templates/navBar', $parameters);
+        echo $view;
+        echo view('templates/footer', $parameters);
+    }
 }

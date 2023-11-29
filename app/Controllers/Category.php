@@ -15,10 +15,8 @@ class Category extends BaseController
         $categoryModel      = Model(CategoryModel::class);
         $data['title']      = 'Categories';
         $data['categories'] = $categoryModel->findAll();
-        $data['session']    = session();
-        
-        return view('templates/navBar', $data)
-            . view('admin/index', $data)
-            . view('templates/footer');
+        $content            = view('admin/index', $data);
+
+        return parent::renderTemplate($content, $data);
     }
 }

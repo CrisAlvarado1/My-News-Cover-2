@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $title; ?></title>
-    <!-- Latest compiled and minified CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="/css/style.css">
-    <!-- Favicon -->
-    <link rel="icon" href="/images/icons/icon.ico" type="image/x-icon">
-</head>
 <nav class="navbar navbar-expand-lg p-md-3 background-color sticky-top">
     <div class="container">
         <!-- Link to Dashboard for Users or Categories Management for Admins -->
@@ -39,7 +25,7 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
                             <?php if (isset($session)) { ?>
-                                <a class="dropdown-item" href="/logout">Logout</a>
+                                <a class="dropdown-item" href="<?php echo site_url('logout') ?>">Logout</a>
                                 <!-- Dropdown options for the administrator user: -->
                                 <?php if ($session->get('role')  === 'admin') : ?>
                                     <a class="dropdown-item" href="<?php echo site_url('') ?>">Categories</a>
@@ -60,5 +46,3 @@
         </div>
     </div>
 </nav>
-
-<body>

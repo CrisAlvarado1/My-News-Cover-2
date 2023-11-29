@@ -4,12 +4,12 @@ namespace App\Controllers;
 
 class Home extends BaseController
 {
-    public function index(): string
+    public function index()
     {
         helper('form');
         $data['title'] = "Login";
-        return view('templates/navBar', $data)
-            . view('index')
-            . view('templates/footer');
+        $content       = view('index');
+
+        return parent::renderTemplate($content, $data);
     }
 }
