@@ -40,12 +40,23 @@ class NewsSourcesModel extends Model
 
     public function getNewsSourcesByUserId($userId)
     {
-        $newsSources = $this->select('news_sources.*, categories.name AS category_name')
+        $query = $this->select('news_sources.*, categories.name AS category_name')
             ->join('categories', 'news_sources.category_id = categories.id')
             ->where('news_sources.user_id', $userId)
-            ->get()
-            ->getResultArray();;
+            ->get();
 
-        return $newsSources;
+        return $query->getResultArray();
+    }
+
+    public function getDistinctCategoriesByUserId($userId)
+    {
+        $query = $this->distinct()
+            ->select('c.id AS category_id, c.name AS category_name')
+            ->from('news_sources ns')
+            ->join('categories c', 'ns.category_id = c.id')
+            ->where('ns.user_id', $userId)
+            ->get();
+
+        return $query->getResultArray();
     }
 }

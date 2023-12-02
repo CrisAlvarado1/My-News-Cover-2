@@ -25,6 +25,7 @@ $routes->get('admin/delete/(:num)', 'Category::delete/$1');
 
 // Routes for the "Portada"
 $routes->get('users/news/index', 'News::index');
+$routes->get('users/news/index/(:num)', 'News::filterNews/$1');
 
 // Routes for the news sources
 $routes->get('users/newsSources/index', 'NewsSources::index');

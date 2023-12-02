@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\CategoryModel;
+use App\Models\NewsModel;
 use App\Models\NewsSourcesModel;
 
 class NewsSources extends BaseController
@@ -69,6 +70,10 @@ class NewsSources extends BaseController
     public function delete($id = null)
     {
         $newsSourcesModel = Model(NewsSourcesModel::class);
+        $newsModel = Model(NewsModel::class);
+
+        // First delete the relational news
+        $newsModel->where('news_source_id', $id)->delete();
         $newsSourcesModel->where('id', $id)->delete();
 
         return $this->response->redirect(site_url('users/newsSources/index'));

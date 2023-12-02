@@ -9,15 +9,20 @@
     <div class="container mt-4">
         <div class="row text-center justify-content-center">
             <!-- The "portada" filter will always be there, it is where all the news is shown -->
-            <div class="col-md-2 border <?php /*echo ($_GET) ? '' : 'selected'; */ ?>">
-                <a href="" class="btn btn-block w-100 h-100 text-decoration-none">Portada</a>
+            <div class="col-md-2 border <?php echo (isset($categoryId)) ? '' : 'selected';  ?>">
+                <a href="<?php echo site_url('users/news/index') ?>" class="btn btn-block w-100 h-100 text-decoration-none">Portada</a>
             </div>
             <!-- Generates filters based on user's related news categories -->
-            <?php /*foreach ($userCategories as $category) : ?>
-                <div class="col-md-2 border <?php echo ($category['category_id'] === $categoryId) ? 'selected' : ''; ?>">
-                    <a href="?category=<?php echo $category['category_id']; ?>" class="btn btn-block w-100 h-100 text-decoration-none"><?php echo $category['category_name']; ?></a>
+            <?php foreach ($filters as $filters) : ?>
+                <?php
+                $selected = '';
+                if (isset($categoryId))
+                    $selected = ($filters['category_id'] === $categoryId) ? 'selected' : '';
+                ?>
+                <div class="col-md-2 border <?php echo $selected ?>">
+                    <a href="<?php echo site_url('users/news/index/' . $filters['category_id']) ?>" class="btn btn-block w-100 h-100 text-decoration-none"><?php echo $filters['category_name']; ?></a>
                 </div>
-            <?php endforeach;*/ ?>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -25,7 +30,7 @@
     <div class="container">
         <div class="row">
             <!-- Validates if there are any news in the user's timeline  -->
-            <?php if (isset($allNews)) { ?>
+            <?php if (!empty($allNews)) { ?>
                 <!-- If there are news, generates the cards to display them (based in a filter) -->
                 <?php foreach ($allNews as $news) :  ?>
                     <div class="col-md-4 mb-4">

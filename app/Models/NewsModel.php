@@ -12,7 +12,7 @@ class NewsModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['title', 'short_description', 'permanlink', 'date', 'url_image', 'news_source_id', 'user_id', 'category_id'];
 
     // Dates
     protected $useTimestamps = false;
@@ -37,4 +37,21 @@ class NewsModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getNews($userId, $categoryId = null)
+    {
+        $query = $this->db->table('news n')
+            ->select('n.*, c.name AS category_name, ns.*')
+            ->join('categories c', 'n.category_id = c.id')
+            ->join('news_sources ns', 'n.news_source_id = ns.id')
+            ->where('n.user_id', $userId);
+
+        if ($categoryId !== null) {
+            $query->where('n.category_id', $categoryId);
+        }
+
+        $query->orderBy('n.date', 'DESC');
+
+        return $query->get()->getResultArray();
+    }
 }
