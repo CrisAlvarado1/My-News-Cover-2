@@ -27,6 +27,10 @@ $routes->get('admin/delete/(:num)', 'Category::delete/$1');
 $routes->get('users/news/index', 'News::index');
 $routes->get('users/news/index/(:num)', 'News::filterNews/$1');
 
+// Routes for the search news
+$routes->post('users/news/index/search', 'News::searchInAllNews');
+$routes->post('users/news/index/search/(:num)', 'News::searchInCategoryNews/$1');
+
 // Routes for the news sources
 $routes->get('users/newsSources/index', 'NewsSources::index');
 $routes->get('users/newsSources/create', 'NewsSources::create');

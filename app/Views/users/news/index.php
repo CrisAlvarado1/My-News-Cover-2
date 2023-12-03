@@ -26,6 +26,35 @@
         </div>
     </div>
 </section>
+<!-- Filter area for tags: -->
+<!-- <section>
+    <div class="container mt-4">
+        <div class="row text-center justify-content-center"> -->
+<!-- Generates filters based on etiquetas -->
+<?php /*foreach ($tags as $tag) : ?>
+                <div class="col-md-2 border">
+                    <a href="<?php  echo site_url('users/news/index?etiqueta[]=' . $etiqueta['id']) ?>" class="btn btn-block w-100 h-100 text-decoration-none"><?php echo $tag['name_tag'];  ?></a>
+                </div>
+            <?php endforeach; */ ?>
+<!-- </div>
+    </div>
+</section> -->
+<!-- Search area for news: -->
+<section>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <?php $category = (isset($categoryId)) ? "/" . $categoryId : '' ?>
+                <form action="<?php echo site_url('users/news/index/search' . $category) ?>" method="post">
+                    <div class="input-group">
+                        <input type="text" name="keywords" class="form-control" placeholder="Search news..." required="true" value="<?php echo (isset($dataKeywords)) ? $dataKeywords : '' ?>">
+                        <input type="submit" class="btn btn-secondary" value="Buscar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 <section class="album py-5">
     <div class="container">
         <div class="row">
@@ -47,7 +76,7 @@
                                 <a href="<?php echo $news['permanlink']; ?>" target="_blank" class="text-decoration-none link-dark">
                                     <h2 class="card-title h5"><?php echo $news['title']; ?></h2>
                                 </a>
-                                <small class="card-text"><?php echo $news['name']; ?> -</small>
+                                <small class="card-text"><?php echo $news['name_source']; ?> -</small>
                                 <small class="card-text"><?php echo $news['category_name']; ?></small>
                                 <p class="card-text"><?php echo $news['short_description']; ?></p>
                                 <div class="position-absolute bottom-0 mb-2">
