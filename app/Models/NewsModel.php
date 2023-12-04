@@ -53,4 +53,23 @@ class NewsModel extends Model
         $query->orderBy('n.date', 'DESC');
         return $query->get()->getResultArray();
     }
+
+    public function getNewsByTags($tagsSelected, $userId, $categoryId = null)
+    {
+        $query = $this->db->table('news n')
+            ->select('n.*, c.name AS category_name, ns.name AS name_source')
+            ->join('categories c', 'n.category_id = c.id')
+            ->join('news_sources ns', 'n.news_source_id = ns.id')
+            ->join('news_tags nt', 'n.id = nt.news_id')
+            ->join('tags t', 'nt.tag_id = t.id')
+            ->whereIn('t.id', $tagsSelected)
+            ->where('n.user_id', $userId);
+
+        if ($categoryId !== null) {
+            $query->where('n.category_id', $categoryId);
+        }
+
+        $query->groupBy('n.id');
+        return $query->get()->getResultArray();
+    }
 }

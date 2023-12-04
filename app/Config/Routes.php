@@ -25,9 +25,11 @@ $routes->get('admin/delete/(:num)', 'Category::delete/$1');
 
 // Routes for the "Portada"
 $routes->get('users/news/index', 'News::index');
-$routes->get('users/news/index/(:num)', 'News::filterNews/$1');
+$routes->get('users/news/index/(:num)', 'News::filterNewsByCategory/$1');
+$routes->get('users/news/index/tags', 'News::filterNewsByTagsInAllNews');
+$routes->get('users/news/index/tags/(:num)', 'News::filterNewsByTagsInCategoryNews/$1');
 
-// Routes for the search news
+// Routes for the search news in "Portada"
 $routes->post('users/news/index/search', 'News::searchInAllNews');
 $routes->post('users/news/index/search/(:num)', 'News::searchInCategoryNews/$1');
 

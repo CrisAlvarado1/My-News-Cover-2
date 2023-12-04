@@ -41,7 +41,7 @@ class NewsTagsModel extends Model
     function getNewsTagsByUser($userId, $categoryId = null)
     {
         $query = $this->db->table('news_tags nt')
-            ->select('nt.tag_id, t.name AS name_tag')
+            ->select('t.id AS tag_id, t.name AS name_tag')
             ->join('tags t', 'nt.tag_id = t.id')
             ->join('news n', 'nt.news_id = n.id')
             ->where('n.user_id', $userId);
@@ -49,7 +49,7 @@ class NewsTagsModel extends Model
             $query->where('n.category_id', $categoryId);
         }
 
-        $query->groupBy('nt.tag_id');
+        $query->groupBy('t.id');
         return $query->get()->getResultArray();
     }
 }

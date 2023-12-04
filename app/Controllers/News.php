@@ -9,34 +9,43 @@ use App\Models\NewsTagsModel;
 
 class News extends BaseController
 {
+    protected $newsSourcesModel;
+    protected $newsModel;
+    protected $newsTagsModel;
+    protected $userId;
+
+    public function __construct()
+    {
+        $this->newsSourcesModel = Model(NewsSourcesModel::class);
+        $this->newsModel        = Model(NewsModel::class);
+        $this->newsTagsModel    = Model(NewsTagsModel::class);
+        $this->userId           = session()->get('user_id');
+    }
+
     public function index()
     {
-        $data    = $this->loadCommonData();
+        $data            = $this->loadCommonData();
+        $data['allNews'] = $this->newsModel->getNews($this->userId);
         $this->renderNews($data);
     }
 
-    public function filterNews($categoryId)
+    public function filterNewsByCategory($categoryId)
     {
-        $data    = $this->loadCommonData($categoryId);
+        $data            = $this->loadCommonData($categoryId);
+        $data['allNews'] = $this->newsModel->getNews($this->userId, $categoryId);
         $this->renderNews($data);
     }
 
     private function loadCommonData($categoryId = null)
     {
-        $newsSourcesModel = Model(NewsSourcesModel::class);
-        $newsModel        = Model(NewsModel::class);
-        $newsTagsModel    = Model(NewsTagsModel::class);
-        $userId           = session()->get('user_id');
         $data['title']    = 'My Cover';
-        $data['filters']  = $newsSourcesModel->getDistinctCategoriesByUserId($userId);
+        $data['filters']  = $this->newsSourcesModel->getDistinctCategoriesByUserId($this->userId);
 
-        if ($categoryId !== null) {
-            $data['allNews']    = $newsModel->getNews($userId, $categoryId);
-            $data['categoryId'] = $categoryId;
-            $data['tags']       = $newsTagsModel->getNewsTagsByUser($userId);
+        if ($categoryId === null) {
+            $data['tags'] = $this->newsTagsModel->getNewsTagsByUser($this->userId);
         } else {
-            $data['allNews'] = $newsModel->getNews($userId);
-            $data['tags']    = $newsTagsModel->getNewsTagsByUser($userId, $categoryId);
+            $data['tags']       = $this->newsTagsModel->getNewsTagsByUser($this->userId, $categoryId);
+            $data['categoryId'] = $categoryId;
         }
 
         return $data;
@@ -44,11 +53,12 @@ class News extends BaseController
 
     public function searchInAllNews()
     {
-        $keywords = $this->request->getVar('keywords');
-        $data     = $this->loadCommonData();
+        $keywords        = $this->request->getVar('keywords');
+        $data            = $this->loadCommonData();
+        $data['allNews'] = $this->newsModel->getNews($this->userId);
 
         if (!empty($keywords)) {
-            $data['allNews'] = $this->searchNewsWithKeywords($data, $keywords);
+            $data['allNews']      = $this->searchNewsWithKeywords($data, $keywords);
             $data['dataKeywords'] = $keywords;
         }
         $this->renderNews($data);
@@ -56,11 +66,12 @@ class News extends BaseController
 
     public function searchInCategoryNews($categoryId)
     {
-        $keywords = $this->request->getVar('keywords');
-        $data     = $this->loadCommonData($categoryId);
+        $keywords        = $this->request->getVar('keywords');
+        $data            = $this->loadCommonData($categoryId);
+        $data['allNews'] = $this->newsModel->getNews($this->userId, $categoryId);
 
         if (!empty($keywords)) {
-            $data['allNews'] = $this->searchNewsWithKeywords($data, $keywords);
+            $data['allNews']      = $this->searchNewsWithKeywords($data, $keywords);
             $data['dataKeywords'] = $keywords;
         }
         $this->renderNews($data);
@@ -87,5 +98,35 @@ class News extends BaseController
     {
         $content = view('users/news/index', $data);
         return parent::renderTemplate($content, $data);
+    }
+
+    public function filterNewsByTagsInAllNews()
+    {
+        $tagsSelected = $this->request->getGet('tagsNews');
+
+        if (!empty($tagsSelected)) {
+            $data                 = $this->loadCommonData();
+            $data['tagsSelected'] = $tagsSelected;
+            $data['allNews']      = $this->newsModel->getNewsByTags($tagsSelected, $this->userId);
+
+            $this->renderNews($data);
+        } else {
+            return redirect()->to('users/news/index');
+        }
+    }
+
+    public function filterNewsByTagsInCategoryNews($categoryId)
+    {
+        $tagsSelected = $this->request->getGet('tagsNews');
+
+        if (!empty($tagsSelected)) {
+            $data                 = $this->loadCommonData($categoryId);
+            $data['tagsSelected'] = $tagsSelected;
+            $data['allNews']      = $this->newsModel->getNewsByTags($tagsSelected, $this->userId, $categoryId);
+
+            $this->renderNews($data);
+        } else {
+            $this->filterNewsByCategory($categoryId);
+        }
     }
 }
