@@ -2,6 +2,7 @@
     <div class="container">
         <h1 class="jumbotron-heading text-muted mt-4 display-6">Your Unique News Cover</h1>
         <hr class="w-25 mx-auto">
+        <a href="<?php echo site_url('users/news/public') ?>" class="btn btn-link btn-sm">Make Public Cover</a>
     </div>
 </section>
 <!-- Filter area: -->
@@ -27,42 +28,44 @@
     </div>
 </section>
 <!-- Filter area for tags: -->
-<section class="mt-4">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-11">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title text-center h5">Filter by Tags</h3>
-                        <?php $category = (isset($categoryId)) ? "/" . $categoryId : '' ?>
-                        <form action="<?= site_url('users/news/index/tags' . $category) ?>" method="get">
-                            <div class="row">
-                                <?php foreach ($tags as $tag) : ?>
-                                    <div class="col-md-3 mb-1">
-                                        <div class="form-check">
-                                            <?php
-                                            $checked = '';
-                                            if (isset($tagsSelected))
-                                                $checked = (in_array($tag['tag_id'], $tagsSelected)) ? 'checked="checked"' : '';
-                                            ?>
-                                            <input class="form-check-input" type="checkbox" name="tagsNews[]" value="<?= $tag['tag_id'] ?>" id="tag<?= $tag['tag_id'] ?>" <?= $checked ?>>
-                                            <label class="form-check-label" for="tag<?= $tag['tag_id'] ?>">
-                                                <?= $tag['name_tag']; ?>
-                                            </label>
+<?php if (!empty($tags)) : ?>
+    <section class="mt-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-11">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title text-center h5">Filter by Tags</h3>
+                            <?php $category = (isset($categoryId)) ? "/" . $categoryId : '' ?>
+                            <form action="<?= site_url('users/news/index/tags' . $category) ?>" method="get">
+                                <div class="row">
+                                    <?php foreach ($tags as $tag) : ?>
+                                        <div class="col-md-3 mb-1">
+                                            <div class="form-check">
+                                                <?php
+                                                $checked = '';
+                                                if (isset($tagsSelected))
+                                                    $checked = (in_array($tag['tag_id'], $tagsSelected)) ? 'checked="checked"' : '';
+                                                ?>
+                                                <input class="form-check-input" type="checkbox" name="tagsNews[]" value="<?= $tag['tag_id'] ?>" id="tag<?= $tag['tag_id'] ?>" <?= $checked ?>>
+                                                <label class="form-check-label" for="tag<?= $tag['tag_id'] ?>">
+                                                    <?= $tag['name_tag']; ?>
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-secondary mt-3">Apply Filters</button>
-                            </div>
-                        </form>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-secondary mt-3">Apply Filters</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+<?php endif; ?>
 <!-- Search area for news: -->
 <section>
     <div class="container mt-4">
@@ -77,7 +80,7 @@
                 </form>
             </div>
             <div class="col-md-8 text-end mt-3">
-                <a href="<?php echo site_url('users/news/index') ?>" class="btn btn-secondary" id="limpiarFiltros">Clean Filters</a>
+                <a href="<?php echo site_url('users/news/index' . $category) ?>" class="btn btn-secondary" id="limpiarFiltros">Clean Filters</a>
             </div>
         </div>
     </div>

@@ -28,6 +28,8 @@ $routes->get('users/news/index', 'News::index');
 $routes->get('users/news/index/(:num)', 'News::filterNewsByCategory/$1');
 $routes->get('users/news/index/tags', 'News::filterNewsByTagsInAllNews');
 $routes->get('users/news/index/tags/(:num)', 'News::filterNewsByTagsInCategoryNews/$1');
+$routes->get('users/news/public', 'News::publicCover');
+$routes->post('users/news/public', 'News::makePublicCover');
 
 // Routes for the search news in "Portada"
 $routes->post('users/news/index/search', 'News::searchInAllNews');

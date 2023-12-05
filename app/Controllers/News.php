@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\NewsModel;
 use App\Models\NewsSourcesModel;
 use App\Models\NewsTagsModel;
+use App\Models\UserModel;
 
 class News extends BaseController
 {
@@ -128,5 +129,35 @@ class News extends BaseController
         } else {
             $this->filterNewsByCategory($categoryId);
         }
+    }
+
+    public function publicCover()
+    {
+        $userModel        = Model(UserModel::class);
+        $data['title']    = "Public Cover";
+        $data['isPublic'] = $userModel->select('is_public')->where('id', $this->userId)->first()['is_public'] ?? false;
+        $content          = view('users/news/public', $data);
+        return parent::renderTemplate($content, $data);
+    }
+
+    public function makePublicCover()
+    {
+        $userModel        = Model(UserModel::class);
+        $data['title']    = "Public Cover";
+        $confirm          = $this->request->getPost('confirm');
+        $disconfirm       = $this->request->getPost('disconfirm');
+
+        if (!empty($confirm) && empty($disconfirm)) {
+            $userModel->where('id', $this->userId)->set(['is_public' => true])->update();
+            $nameUser           = session()->get('name');
+            $lastNameUser       = session()->get('lastName');
+            $data['accessLink'] = 'http://mynewscover2.com/index.php/users/' . $nameUser . '/' . $lastNameUser . '';
+        } else {
+            $userModel->where('id', $this->userId)->set(['is_public' => false])->update();
+        }
+
+        $data['isPublic'] = $userModel->select('is_public')->where('id', $this->userId)->first()['is_public'] ?? false;
+        $content          = view('users/news/public', $data);
+        return parent::renderTemplate($content, $data);
     }
 }

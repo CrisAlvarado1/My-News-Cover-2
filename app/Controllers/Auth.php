@@ -48,6 +48,7 @@ class Auth extends BaseController
             'email'     => $user['email'],
             'role'      => $role,
             'name'      => $user['first_name'],
+            'lastName'  => $user['last_name'],
             'is_logged' => true
         ]);
         return $session;
