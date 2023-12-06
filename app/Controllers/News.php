@@ -27,14 +27,24 @@ class News extends BaseController
     {
         $data            = $this->loadCommonData();
         $data['allNews'] = $this->newsModel->getNews($this->userId);
-        $this->renderNews($data);
+
+        if ($this->validateExistsNews($data['allNews'])) {
+            $this->renderNews($data);
+        } else {
+            return redirect()->to('users/newsSources/create');
+        }
     }
 
     public function filterNewsByCategory($categoryId)
     {
         $data            = $this->loadCommonData($categoryId);
         $data['allNews'] = $this->newsModel->getNews($this->userId, $categoryId);
-        $this->renderNews($data);
+
+        if ($this->validateExistsNews($data['allNews'])) {
+            $this->renderNews($data);
+        } else {
+            return redirect()->to('users/newsSources/create');
+        }
     }
 
     private function loadCommonData($categoryId = null)
@@ -159,5 +169,14 @@ class News extends BaseController
         $data['isPublic'] = $userModel->select('is_public')->where('id', $this->userId)->first()['is_public'] ?? false;
         $content          = view('users/news/public', $data);
         return parent::renderTemplate($content, $data);
+    }
+
+    private function validateExistsNews($news)
+    {
+        if (!empty($news)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

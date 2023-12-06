@@ -18,9 +18,13 @@ class NewsSources extends BaseController
         $data['title']       = 'News Sources';
         $userId              = session()->get('user_id');
         $data['newsSources'] = $newsSourcesModel->getNewsSourcesByUserId($userId);
-        $content             = view('users/newsSources/index', $data);
 
-        return parent::renderTemplate($content, $data);
+        if ($this->validateExistsNewsSources($data['newsSources'])) {
+            $content = view('users/newsSources/index', $data);
+            return parent::renderTemplate($content, $data);
+        } else {
+            return redirect()->to('users/newsSources/create');
+        }
     }
 
     public function create()
@@ -43,9 +47,13 @@ class NewsSources extends BaseController
         $data['actionTitle'] = 'Edit News Sources';
         $data['categories']  = $categoryModel->findAll();
         $data['newsSource']  = $newsSourcesModel->where('id', $id)->first();
-        $content             = view('users/newsSources/form', $data);
 
-        return parent::renderTemplate($content, $data);
+        if ($this->validateExistsNewsSources($data['newsSource'])) {
+            $content = view('users/newsSources/form', $data);
+            return parent::renderTemplate($content, $data);
+        } else {
+            return redirect()->to('users/newsSources/create');
+        }
     }
 
     // insert / update data
@@ -77,5 +85,14 @@ class NewsSources extends BaseController
         $newsSourcesModel->where('id', $id)->delete();
 
         return $this->response->redirect(site_url('users/newsSources/index'));
+    }
+
+    private function validateExistsNewsSources($newsSources)
+    {
+        if (!empty($newsSources)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
