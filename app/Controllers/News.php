@@ -49,8 +49,9 @@ class News extends BaseController
 
     private function loadCommonData($categoryId = null)
     {
-        $data['title']    = 'My Cover';
-        $data['filters']  = $this->newsSourcesModel->getDistinctCategoriesByUserId($this->userId);
+        $data['title']      = 'My Cover';
+        $data['largeTitle'] = 'Your Unique News Cover';
+        $data['filters']    = $this->newsSourcesModel->getDistinctCategoriesByUserId($this->userId);
 
         if ($categoryId === null) {
             $data['tags'] = $this->newsTagsModel->getNewsTagsByUser($this->userId);
@@ -141,11 +142,23 @@ class News extends BaseController
         }
     }
 
+    private function validateExistsNews($news)
+    {
+        if (!empty($news)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function publicCover()
     {
         $userModel        = Model(UserModel::class);
         $data['title']    = "Public Cover";
         $data['isPublic'] = $userModel->select('is_public')->where('id', $this->userId)->first()['is_public'] ?? false;
+        if ($data['isPublic']) {
+            $data['accessLink'] = $this->buildPublicCoverLink();
+        }
         $content          = view('users/news/public', $data);
         return parent::renderTemplate($content, $data);
     }
@@ -159,9 +172,7 @@ class News extends BaseController
 
         if (!empty($confirm) && empty($disconfirm)) {
             $userModel->where('id', $this->userId)->set(['is_public' => true])->update();
-            $nameUser           = session()->get('name');
-            $lastNameUser       = session()->get('lastName');
-            $data['accessLink'] = 'http://mynewscover2.com/index.php/users/' . $nameUser . '/' . $lastNameUser . '';
+            $data['accessLink'] = $this->buildPublicCoverLink();
         } else {
             $userModel->where('id', $this->userId)->set(['is_public' => false])->update();
         }
@@ -171,12 +182,12 @@ class News extends BaseController
         return parent::renderTemplate($content, $data);
     }
 
-    private function validateExistsNews($news)
+    private function buildPublicCoverLink()
     {
-        if (!empty($news)) {
-            return true;
-        } else {
-            return false;
-        }
+        $nameUser     = session()->get('name');
+        $lastNameUser = session()->get('lastName');
+        $link         = 'http://mynewscover2.com/index.php/public-cover/' .
+            $nameUser . '/' . $lastNameUser . '/' . $this->userId . '';
+        return $link;
     }
 }

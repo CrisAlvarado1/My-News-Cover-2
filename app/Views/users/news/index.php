@@ -1,17 +1,22 @@
 <section class="jumbotron text-center">
     <div class="container">
-        <h1 class="jumbotron-heading text-muted mt-4 display-6">Your Unique News Cover</h1>
+        <h1 class="jumbotron-heading text-muted mt-4 display-6">
+            <?php echo $largeTitle ?>
+        </h1>
         <hr class="w-25 mx-auto">
-        <a href="<?php echo site_url('users/news/public') ?>" class="btn btn-link btn-sm">Make Public Cover</a>
+        <?php if (!isset($userCover)) : ?>
+            <a href="<?php echo site_url('users/news/public') ?>" class="btn btn-link btn-sm">Make Public Cover</a>
+        <?php endif; ?>
     </div>
 </section>
 <!-- Filter area: -->
 <section>
     <div class="container mt-4">
         <div class="row text-center justify-content-center">
+            <?php $route = (!isset($userCover)) ? 'users/news/index' : 'public-cover/' . $nameUser . '/' . $lastNameUser . '/' . $userId; ?>
             <!-- The "portada" filter will always be there, it is where all the news is shown -->
             <div class="col-md-2 border <?php echo (isset($categoryId)) ? '' : 'selected';  ?>">
-                <a href="<?php echo site_url('users/news/index') ?>" class="btn btn-block w-100 h-100 text-decoration-none">Portada</a>
+                <a href="<?php echo site_url($route) ?>" class="btn btn-block w-100 h-100 text-decoration-none">Portada</a>
             </div>
             <!-- Generates filters based on user's related news categories -->
             <?php foreach ($filters as $filters) : ?>
@@ -21,7 +26,7 @@
                     $selected = ($filters['category_id'] === $categoryId) ? 'selected' : '';
                 ?>
                 <div class="col-md-2 border <?php echo $selected ?>">
-                    <a href="<?php echo site_url('users/news/index/' . $filters['category_id']) ?>" class="btn btn-block w-100 h-100 text-decoration-none"><?php echo $filters['category_name']; ?></a>
+                    <a href="<?php echo site_url($route . '/' . $filters['category_id']) ?>" class="btn btn-block w-100 h-100 text-decoration-none"><?php echo $filters['category_name']; ?></a>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -67,24 +72,26 @@
     </section>
 <?php endif; ?>
 <!-- Search area for news: -->
-<section>
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-4 mt-3">
-                <?php $category = (isset($categoryId)) ? "/" . $categoryId : '' ?>
-                <form action="<?php echo site_url('users/news/index/search' . $category) ?>" method="post">
-                    <div class="input-group">
-                        <input type="text" name="keywords" class="form-control" placeholder="Search news..." required="true" value="<?php echo (isset($dataKeywords)) ? $dataKeywords : '' ?>">
-                        <input type="submit" class="btn btn-secondary" value="Buscar">
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-8 text-end mt-3">
-                <a href="<?php echo site_url('users/news/index' . $category) ?>" class="btn btn-secondary" id="limpiarFiltros">Clean Filters</a>
+<?php if (!isset($userCover)) : ?>
+    <section>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-4 mt-3">
+                    <?php $category = (isset($categoryId)) ? "/" . $categoryId : '' ?>
+                    <form action="<?php echo site_url('users/news/index/search' . $category) ?>" method="post">
+                        <div class="input-group">
+                            <input type="text" name="keywords" class="form-control" placeholder="Search news..." required="true" value="<?php echo (isset($dataKeywords)) ? $dataKeywords : '' ?>">
+                            <input type="submit" class="btn btn-secondary" value="Buscar">
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-8 text-end mt-3">
+                    <a href="<?php echo site_url('users/news/index' . $category) ?>" class="btn btn-secondary" id="limpiarFiltros">Clean Filters</a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+<?php endif; ?>
 <section class="album py-5">
     <div class="container">
         <div class="row">
