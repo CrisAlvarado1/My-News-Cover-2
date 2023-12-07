@@ -9,9 +9,14 @@ use App\Models\NewsSourcesModel;
 
 class NewsSources extends BaseController
 {
-
     protected $filters = ['auth'];
 
+    /**
+     * Displays the list of news sources associated with the current user.
+     * Redirects to create page if no news sources exist.
+     *
+     * @return string Rendered template content.
+     */
     public function index()
     {
         $newsSourcesModel    = Model(NewsSourcesModel::class);
@@ -27,6 +32,11 @@ class NewsSources extends BaseController
         }
     }
 
+    /**
+     * Displays the form to create a new news source.
+     *
+     * @return string Rendered template content.
+     */
     public function create()
     {
         $categoryModel       = Model(CategoryModel::class);
@@ -38,6 +48,13 @@ class NewsSources extends BaseController
         return parent::renderTemplate($content, $data);
     }
 
+    /**
+     * Displays the form to edit an existing news source.
+     * Redirects to create page if the news source does not exist.
+     *
+     * @param int $id The ID of the news source to edit.
+     * @return string Rendered template content.
+     */
     public function edit($id)
     {
         $newsSourcesModel = Model(NewsSourcesModel::class);
@@ -56,7 +73,11 @@ class NewsSources extends BaseController
         }
     }
 
-    // insert / update data
+    /**
+     * Saves or updates a news source based on the provided form data.
+     *
+     * @return RedirectResponse Redirects to the news sources index page.
+     */
     public function save()
     {
         $newsSourcesModel = Model(NewsSourcesModel::class);
@@ -75,6 +96,12 @@ class NewsSources extends BaseController
         return $this->response->redirect(site_url('users/newsSources/index'));
     }
 
+    /**
+     * Deletes a news source and its associated news.
+     *
+     * @param int|null $id The ID of the news source to delete.
+     * @return RedirectResponse Redirects to the news sources index page.
+     */
     public function delete($id = null)
     {
         $newsSourcesModel = Model(NewsSourcesModel::class);
@@ -87,12 +114,14 @@ class NewsSources extends BaseController
         return $this->response->redirect(site_url('users/newsSources/index'));
     }
 
+    /**
+     * Validates the existence of news sources.
+     *
+     * @param mixed $newsSources The news sources data.
+     * @return bool Returns true if news sources exist, false otherwise.
+     */
     private function validateExistsNewsSources($newsSources)
     {
-        if (!empty($newsSources)) {
-            return true;
-        } else {
-            return false;
-        }
+        return !empty($newsSources);
     }
 }

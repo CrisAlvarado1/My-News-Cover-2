@@ -36,6 +36,7 @@
                                         <a class="dropdown-item" href="<?php echo site_url('users/news/index') ?>">My Cover</a>
                                     <?php endif; ?>
                                 <?php } else { ?>
+                                    <!-- Dropdown options for the login and signup area: -->
                                     <a class="dropdown-item" href="<?php echo site_url('/') ?>">Login</a>
                                     <a class="dropdown-item" href="<?php echo site_url('users/index')  ?>">Sign Up</a>
                                 <?php } ?>
@@ -45,6 +46,7 @@
                 </ul>
             </div>
         <?php } else { ?>
+            <!-- Show the name of the owner of the cover on the public cover -->
             <span class="font-weight-bold"><?php echo 'Cover of ' . $userCover ?></span>
         <?php } ?>
     </div>

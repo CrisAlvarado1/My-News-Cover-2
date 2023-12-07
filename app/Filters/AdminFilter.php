@@ -25,8 +25,10 @@ class AdminFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
+        // Get the role of the active user
         $userRole = session()->role;
 
+        // If is not a admin redirect to logout
         if ($userRole !== 'admin') {
             return redirect()->to('logout');
         }

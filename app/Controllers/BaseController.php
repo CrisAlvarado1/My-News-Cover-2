@@ -56,6 +56,14 @@ abstract class BaseController extends Controller
         // E.g.: $this->session = \Config\Services::session();
     }
 
+    /**
+     * Render a template with common views.
+     * 
+     * @param string $view       The main content view to be rendered.
+     * @param array  $parameters Additional parameters to pass to the views.
+     *                           Defaults to an empty array.
+     * @return void Displays the rendered template.
+     */
     public function renderTemplate($view, $parameters = [])
     {
         if (session()->is_logged) {

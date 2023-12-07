@@ -9,6 +9,7 @@
 
 <section>
     <div class="container mt-5 text-center">
+        <!-- Show the link of the public cover -->
         <?php if (isset($accessLink)) : ?>
             <div class="alert alert-success" role="alert">
                 <span>Cover published successfully! Share the link:</span>
@@ -17,7 +18,7 @@
         <?php endif; ?>
 
         <form action="<?= site_url('users/news/public') ?>" method="post">
-            <!-- User confirmation -->
+            <!-- User confirmation for make public -->
             <?php if (!$isPublic) : ?>
                 <div class="form-group mt-4">
                     <label>
@@ -26,7 +27,7 @@
                     </label>
                 </div>
             <?php endif; ?>
-
+            <!-- User confirmation for make private -->
             <?php if ($isPublic) : ?>
                 <div class="form-group mt-4">
                     <label>

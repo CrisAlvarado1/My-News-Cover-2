@@ -38,6 +38,13 @@ class NewsSourcesModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * Get news sources based on user ID.
+     *
+     * @param int $userId The user ID.
+     *
+     * @return array An array of news sources data with associated category names.
+     */
     public function getNewsSourcesByUserId($userId)
     {
         $query = $this->select('news_sources.*, categories.name AS category_name')
@@ -48,6 +55,13 @@ class NewsSourcesModel extends Model
         return $query->getResultArray();
     }
 
+    /**
+     * Get distinct categories associated with news sources for a user.
+     *
+     * @param int $userId The user ID.
+     *
+     * @return array An array of distinct category data.
+     */
     public function getDistinctCategoriesByUserId($userId)
     {
         $query = $this->distinct()

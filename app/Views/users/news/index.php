@@ -4,6 +4,7 @@
             <?php echo $largeTitle ?>
         </h1>
         <hr class="w-25 mx-auto">
+        <!-- Show the option to make public cover -->
         <?php if (!isset($userCover)) : ?>
             <a href="<?php echo site_url('users/news/public') ?>" class="btn btn-link btn-sm">Make Public Cover</a>
         <?php endif; ?>
@@ -13,6 +14,7 @@
 <section>
     <div class="container mt-4">
         <div class="row text-center justify-content-center">
+            <!-- Generates the route for the main page and main page when is public -->
             <?php $route = (!isset($userCover)) ? 'users/news/index' : 'public-cover/' . $nameUser . '/' . $lastNameUser . '/' . $userId; ?>
             <!-- The "portada" filter will always be there, it is where all the news is shown -->
             <div class="col-md-2 border <?php echo (isset($categoryId)) ? '' : 'selected';  ?>">
@@ -44,15 +46,19 @@
                             <?php $category = (isset($categoryId)) ? "/" . $categoryId : '' ?>
                             <form action="<?= site_url('users/news/index/tags' . $category) ?>" method="get">
                                 <div class="row">
+                                    <!-- Generates filters based on the news's related tags -->
                                     <?php foreach ($tags as $tag) : ?>
                                         <div class="col-md-3 mb-1">
                                             <div class="form-check">
                                                 <?php
+                                                // Determine whether the current tag is selected based on the tagsSelected array
                                                 $checked = '';
                                                 if (isset($tagsSelected))
                                                     $checked = (in_array($tag['tag_id'], $tagsSelected)) ? 'checked="checked"' : '';
                                                 ?>
+                                                <!-- Checkbox input for the tag with dynamic ID and value -->
                                                 <input class="form-check-input" type="checkbox" name="tagsNews[]" value="<?= $tag['tag_id'] ?>" id="tag<?= $tag['tag_id'] ?>" <?= $checked ?>>
+                                                <!-- Label for the checkbox displaying the tag name -->
                                                 <label class="form-check-label" for="tag<?= $tag['tag_id'] ?>">
                                                     <?= $tag['name_tag']; ?>
                                                 </label>
@@ -76,15 +82,19 @@
     <section>
         <div class="container mt-4">
             <div class="row">
+                <!-- Search form -->
                 <div class="col-md-4 mt-3">
                     <?php $category = (isset($categoryId)) ? "/" . $categoryId : '' ?>
                     <form action="<?php echo site_url('users/news/index/search' . $category) ?>" method="post">
                         <div class="input-group">
+                            <!-- Input field for entering search keywords -->
                             <input type="text" name="keywords" class="form-control" placeholder="Search news..." required="true" value="<?php echo (isset($dataKeywords)) ? $dataKeywords : '' ?>">
+                            <!-- Submit button for initiating the search -->
                             <input type="submit" class="btn btn-secondary" value="Buscar">
                         </div>
                     </form>
                 </div>
+                <!-- Clear filters button -->
                 <div class="col-md-8 text-end mt-3">
                     <a href="<?php echo site_url('users/news/index' . $category) ?>" class="btn btn-secondary" id="limpiarFiltros">Clean Filters</a>
                 </div>

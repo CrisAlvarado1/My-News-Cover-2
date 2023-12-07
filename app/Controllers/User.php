@@ -11,6 +11,11 @@ use App\Models\UserModel;
 class User extends BaseController
 {
 
+    /**
+     * Displays the sign-up form with the necessary data (countries and default user role).
+     *
+     * @return string Rendered template content.
+     */
     public function index()
     {
         helper('form');
@@ -25,6 +30,12 @@ class User extends BaseController
         return parent::renderTemplate($content, $data);
     }
 
+    /**
+     * Handles the user registration process and sends a verification email.
+     *
+     * @param int $roleId The ID of the default user role.
+     * @return RedirectResponse Redirects to the appropriate page based on the registration status.
+     */
     public function store($roleId)
     {
         $userModel    = model(UserModel::class);
@@ -64,6 +75,12 @@ class User extends BaseController
         }
     }
 
+    /**
+     * Sends a registration confirmation email to the user.
+     *
+     * @param string $userEmail The email address of the registered user.
+     * @return void
+     */
     private function sendEmailToUser($userEmail)
     {
         $to_email = $userEmail;

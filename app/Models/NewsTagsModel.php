@@ -38,6 +38,14 @@ class NewsTagsModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * Get distinct tags associated with news created by a user, optionally filtered by category.
+     *
+     * @param int      $userId      The user ID.
+     * @param int|null $categoryId  Optional category ID to filter tags.
+     *
+     * @return array An array of distinct tag data.
+     */
     function getNewsTagsByUser($userId, $categoryId = null)
     {
         $query = $this->db->table('news_tags nt')

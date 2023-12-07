@@ -7,10 +7,17 @@ use App\Models\UserModel;
 
 class Auth extends BaseController
 {
+    /**
+     * Authenticate user based on provided email and password.
+     *
+     * Validates the email and password, checks user credentials,
+     * and redirects accordingly.
+     *
+     * @return RedirectResponse Redirects to the appropriate page based on user role.
+     */
     public function authenticate()
     {
         $validation = \Config\Services::validation();
-
         $validation->setRules([
             'email'    => 'required|valid_email',
             'password' => 'required',
@@ -31,6 +38,7 @@ class Auth extends BaseController
         }
 
         $data['session'] = $this->setSession($user);
+
         if ($userModel->isAdmin($user['id'])) {
             return redirect()->to('admin/index');
         } else {
@@ -38,6 +46,13 @@ class Auth extends BaseController
         }
     }
 
+    /**
+     * Set user session after successful authentication.
+     *
+     * @param array $user User data obtained after successful authentication.
+     * 
+     * @return SessionHandlerInterface The CodeIgniter session handler.
+     */
     private function setSession($user)
     {
         $role = ($user['role_id'] == 1) ? 'admin' : 'user';
@@ -54,8 +69,15 @@ class Auth extends BaseController
         return $session;
     }
 
+
+    /**
+     * Logout user by destroying the session.
+     *
+     * @return RedirectResponse Redirects to the home page after logout.
+     */
     public function logout()
     {
+        // Destroy the session
         $session = session();
         $session->destroy();
         return redirect()->to('/');

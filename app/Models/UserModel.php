@@ -38,17 +38,37 @@ class UserModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    // Validates if the email already exists
+    /**
+     * Check if an email already exists in the user database.
+     *
+     * @param string $email The email to check for existence.
+     *
+     * @return bool True if the email exists, false otherwise.
+     */
     public function isEmailExists($email)
     {
         return $this->where('email', $email)->countAllResults() > 0;
     }
 
+    /**
+     * Get a user by their email address.
+     *
+     * @param string $email The email of the user to retrieve.
+     *
+     * @return array|null An array representing the user if found, or null if not found.
+     */
     public function getByEmail($email)
     {
         return $this->where('email', $email)->first();
     }
 
+    /**
+     * Check if a user has an administrator role.
+     *
+     * @param int $userId The ID of the user to check.
+     *
+     * @return bool True if the user has an administrator role, false otherwise.
+     */
     public function isAdmin($userId)
     {
         $user = $this->find($userId);

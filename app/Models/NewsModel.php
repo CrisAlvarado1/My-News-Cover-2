@@ -38,6 +38,14 @@ class NewsModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * Get news based on user ID and optional category ID.
+     *
+     * @param int      $userId      The user ID.
+     * @param int|null $categoryId  Optional category ID.
+     *
+     * @return array An array of news data.
+     */
     public function getNews($userId, $categoryId = null)
     {
         $query = $this->db->table('news n')
@@ -54,6 +62,15 @@ class NewsModel extends Model
         return $query->get()->getResultArray();
     }
 
+    /**
+     * Get news based on selected tags, user ID, and optional category ID.
+     *
+     * @param array    $tagsSelected An array of selected tag IDs.
+     * @param int      $userId       The user ID.
+     * @param int|null $categoryId   Optional category ID.
+     *
+     * @return array An array of news data.
+     */
     public function getNewsByTags($tagsSelected, $userId, $categoryId = null)
     {
         $query = $this->db->table('news n')
