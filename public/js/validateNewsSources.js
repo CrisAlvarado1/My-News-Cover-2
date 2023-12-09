@@ -41,5 +41,5 @@ function validateForm(event) {
 }
 
 // Get the form and add the event
-let form = document.querySelector('form');
+let form = document.getElementById('newsSourcesForm');
 form.addEventListener('submit', validateForm);

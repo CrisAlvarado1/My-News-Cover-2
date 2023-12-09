@@ -30,4 +30,3 @@
         </div>
     </div>
 </section>
-<script src="/js/alerts.js"></script>

@@ -39,6 +39,7 @@ class NewsSources extends BaseController
      */
     public function create()
     {
+        helper('form');
         $categoryModel       = Model(CategoryModel::class);
         $data['title']       = 'New - News Sources';
         $data['actionTitle'] = 'Create News Sources';
@@ -57,6 +58,7 @@ class NewsSources extends BaseController
      */
     public function edit($id)
     {
+        helper('form');
         $newsSourcesModel = Model(NewsSourcesModel::class);
         $categoryModel    = Model(CategoryModel::class);
 
@@ -80,14 +82,27 @@ class NewsSources extends BaseController
      */
     public function save()
     {
+        $validation       = \Config\Services::validation();
         $newsSourcesModel = Model(NewsSourcesModel::class);
-        $id = $this->request->getVar('id');
-        $data = [
+        $id               = $this->request->getVar('id');
+        $data             = [
             'name'        => $this->request->getVar('name'),
             'url'         => $this->request->getVar('url'),
             'category_id' => $this->request->getVar('category'),
             'user_id'     => session()->get('user_id')
         ];
+
+        $validation->setRules([
+            'name'     => 'required|max_length[255]',
+            'url'      => 'required|valid_url|max_length[255]',
+            'category' => 'required'
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            $route = (!empty($id)) ? 'users/newsSources/edit/' . $id : 'users/newsSources/create';
+            return redirect()->to($route)->withInput()->with('errors', $validation->getErrors());
+        }
+
         if ($id) {
             $newsSourcesModel->update($id, $data);
         } else {
@@ -109,6 +124,7 @@ class NewsSources extends BaseController
 
         // First delete the relational news
         $newsModel->where('news_source_id', $id)->delete();
+        // Later delete the specif news sources
         $newsSourcesModel->where('id', $id)->delete();
 
         return $this->response->redirect(site_url('users/newsSources/index'));

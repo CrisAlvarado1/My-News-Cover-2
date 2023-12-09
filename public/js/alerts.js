@@ -15,16 +15,6 @@ window.addEventListener("load", function () {
             if (errorValue === "news") {
                 alert("This category has related news.");
             }
-
-            // When the user want sign up with the one email is already register
-            if (errorValue === "exist") {
-                alert("There is already a user with this email.");
-            }
-
-            // When the user want sign up with the one email is already register
-            if (errorValue === "login") {
-                alert("Invalid parameters.");
-            }
         }
     }
 });

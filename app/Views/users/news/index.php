@@ -14,11 +14,9 @@
 <section>
     <div class="container mt-4">
         <div class="row text-center justify-content-center">
-            <!-- Generates the route for the main page and main page when is public -->
-            <?php $route = (!isset($userCover)) ? 'users/news/index' : 'public-cover/' . $nameUser . '/' . $lastNameUser . '/' . $userId; ?>
             <!-- The "portada" filter will always be there, it is where all the news is shown -->
             <div class="col-md-2 border <?php echo (isset($categoryId)) ? '' : 'selected';  ?>">
-                <a href="<?php echo site_url($route) ?>" class="btn btn-block w-100 h-100 text-decoration-none">Portada</a>
+                <a href="<?php echo site_url($routeCategory) ?>" class="btn btn-block w-100 h-100 text-decoration-none">Portada</a>
             </div>
             <!-- Generates filters based on user's related news categories -->
             <?php foreach ($filters as $filters) : ?>
@@ -28,7 +26,7 @@
                     $selected = ($filters['category_id'] === $categoryId) ? 'selected' : '';
                 ?>
                 <div class="col-md-2 border <?php echo $selected ?>">
-                    <a href="<?php echo site_url($route . '/' . $filters['category_id']) ?>" class="btn btn-block w-100 h-100 text-decoration-none"><?php echo $filters['category_name']; ?></a>
+                    <a href="<?php echo site_url($routeCategory . '/' . $filters['category_id']) ?>" class="btn btn-block w-100 h-100 text-decoration-none"><?php echo $filters['category_name']; ?></a>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -40,12 +38,12 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-11">
-                    <div class="card">
+                    <div class="card border-0">
                         <div class="card-body">
                             <h3 class="card-title text-center h5">Filter by Tags</h3>
                             <?php $category = (isset($categoryId)) ? "/" . $categoryId : '' ?>
-                            <form action="<?= site_url('users/news/index/tags' . $category) ?>" method="get">
-                                <div class="row">
+                            <form action="<?= site_url('users/news/index/tags' . $category) ?>" method="post">
+                                <div class="row border">
                                     <!-- Generates filters based on the news's related tags -->
                                     <?php foreach ($tags as $tag) : ?>
                                         <div class="col-md-3 mb-1">

@@ -3,38 +3,13 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Controllers\BaseNewsController;
 use App\Models\NewsModel;
 use App\Models\NewsSourcesModel;
 use App\Models\UserModel;
 
-class PublicCover extends BaseController
+class PublicCover extends BaseNewsController
 {
-    /**
-     * @var NewsModel News Sources Model.
-     */
-    protected $newsSourcesModel;
-
-    /**
-     * @var NewsModel News Model.
-     */
-    protected $newsModel;
-
-    /**
-     * @var NewsModel User Model.
-     */
-    protected $userModel;
-
-    /**
-     * Class constructor.
-     */
-    public function __construct()
-    {
-        $this->newsSourcesModel = model(NewsSourcesModel::class);
-        $this->newsModel        = model(NewsModel::class);
-        $this->userModel        = model(UserModel::class);
-    }
-
-
     /**
      * Displays the main news page as the shared public front page.
      *
@@ -50,10 +25,9 @@ class PublicCover extends BaseController
         $data['allNews'] = $this->newsModel->getNews($userId);
 
         if ($this->validateIsPublic($userId)) {
-            $content = view('users/news/index', $data);
-            return parent::renderTemplate($content, $data);
+            return parent::renderNews($data);
         } else {
-            return redirect()->to('/');
+            return redirect()->to('user/' . $name . '/' . $lastName . '/' . $userId);
         }
     }
 
@@ -74,10 +48,9 @@ class PublicCover extends BaseController
         $data['categoryId'] = $categoryId;
 
         if ($this->validateIsPublic($userId)) {
-            $content = view('users/news/index', $data);
-            return parent::renderTemplate($content, $data);
+            return parent::renderNews($data);
         } else {
-            return redirect()->to('/');
+            return redirect()->to('user/' . $name . '/' . $lastName . '/' . $userId . '/' . $categoryId);
         }
     }
 
@@ -111,13 +84,11 @@ class PublicCover extends BaseController
      */
     private function loadCommonData($name, $lastName, $userId)
     {
-        $data['title']        = 'Cover of ' . $name;
-        $data['filters']      = $this->newsSourcesModel->getDistinctCategoriesByUserId($userId);;
-        $data['userCover']    = $name . ' ' . $lastName;
-        $data['nameUser']     = $name;
-        $data['lastNameUser'] = $lastName;
-        $data['userId']       = $userId;
-        $data['largeTitle']   = $name . ' Unique News Cover';
+        $data['title']         = 'Cover of ' . $name;
+        $data['filters']       = $this->newsSourcesModel->getDistinctCategoriesByUserId($userId);;
+        $data['userCover']     = $name . ' ' . $lastName;
+        $data['largeTitle']    = $name . ' Unique News Cover';
+        $data['routeCategory'] = 'user/' . $name . '/' . $lastName . '/' . $userId;
 
         return $data;
     }

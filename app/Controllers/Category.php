@@ -33,6 +33,7 @@ class Category extends BaseController
      */
     public function create()
     {
+        helper('form');
         $data['title']            = 'New Category';
         $data['actionTitle']      = 'Create Category';
         $content                  = view('admin/form', $data);
@@ -49,6 +50,7 @@ class Category extends BaseController
      */
     public function edit($id)
     {
+        helper('form');
         $categoryModel            = Model(CategoryModel::class);
         $data['title']            = 'Edit Categories';
         $data['actionTitle']      = 'Edit Category';
@@ -58,14 +60,29 @@ class Category extends BaseController
         return parent::renderTemplate($content, $data);
     }
 
-    // insert / update data
+    /**
+     * Save method for inserting or updating data in the database.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirects to the 'admin/index
+     */
     public function save()
     {
+        $validation    = \Config\Services::validation();
         $categoryModel = Model(CategoryModel::class);
-        $id = $this->request->getVar('id');
-        $data = [
+        $id            = $this->request->getVar('id');
+        $data          = [
             'name' => $this->request->getVar('name')
         ];
+
+        $validation->setRules([
+            'name' => 'required'
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            $route = (!empty($id)) ? 'admin/edit/' . $id : 'admin/create';
+            return redirect()->to($route)->withInput()->with('errors', $validation->getErrors());
+        }
+
         if ($id) {
             $categoryModel->update($id, $data);
         } else {
@@ -89,6 +106,8 @@ class Category extends BaseController
         $relatedNews = $newsModel->where('category_id', $id)->countAllResults();
         if ($relatedNews == 0) {
             $categoryModel->where('id', $id)->delete();
+        } else {
+            return $this->response->redirect(site_url('admin/index?error=news'));
         }
 
         return $this->response->redirect(site_url('admin/index'));

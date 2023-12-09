@@ -66,12 +66,12 @@ class User extends BaseController
 
                 $this->sendEmailToUser($userData['email']);
 
-                return redirect()->to('/?status=register');
+                return redirect()->to('/')->with('error', 'Successfully registered');
             } else {
-                return redirect()->to('users/signup?error=true');
+                return redirect()->to('users/index')->with('error', 'Database problems, try again');
             }
         } else {
-            return redirect()->to('/?error=exists');
+            return redirect()->to('/')->with('error', 'Already registered email');
         }
     }
 

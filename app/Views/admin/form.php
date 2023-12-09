@@ -3,6 +3,8 @@
         <div class="row">
             <div class="col-12 col-sm-8 col-md-7">
                 <h1 class="font-weight-light text-muted display-6 mt-5"><?php echo $actionTitle ?></h1>
+                <?= session()->getFlashdata('error') ?>
+                <?= validation_list_errors() ?>
                 <form action="<?= site_url('admin/save'); ?>" method="POST" class="form-inline mt-3" role="form">
                     <input type="hidden" class="form-control" name="id" value="<?php echo isset($category) ? $category['id'] : '' ?>">
                     <div class="border-bottom border-top">

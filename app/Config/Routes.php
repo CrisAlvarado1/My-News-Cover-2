@@ -14,7 +14,7 @@ $routes->get('logout', 'Auth::logout');
 
 // Routes for the sign up
 $routes->get('users/index', 'User::index');
-$routes->post('users/index/(:num)', 'User::store/$1');
+$routes->post('user/index/(:num)', 'User::store/$1');
 
 // Routes for the categories (admin area)
 $routes->get('admin/index', 'Category::index', ['filter' => 'admin']);
@@ -26,8 +26,8 @@ $routes->get('admin/delete/(:num)', 'Category::delete/$1', ['filter' => 'admin']
 // Routes for the "Portada"
 $routes->get('users/news/index', 'News::index');
 $routes->get('users/news/index/(:num)', 'News::filterNewsByCategory/$1');
-$routes->get('users/news/index/tags', 'News::filterNewsByTagsInAllNews');
-$routes->get('users/news/index/tags/(:num)', 'News::filterNewsByTagsInCategoryNews/$1');
+$routes->post('users/news/index/tags', 'News::filterNewsByTagsInAllNews');
+$routes->post('users/news/index/tags/(:num)', 'News::filterNewsByTagsInCategoryNews/$1');
 $routes->get('users/news/public', 'News::publicCover');
 $routes->post('users/news/public', 'News::makePublicCover');
 
@@ -43,5 +43,5 @@ $routes->get('users/newsSources/edit/(:num)', 'NewsSources::edit/$1');
 $routes->get('users/newsSources/delete/(:num)', 'NewsSources::delete/$1');
 
 // Route for the public "Portada"
-$routes->get('public-cover/(:segment)/(:segment)/(:num)', 'PublicCover::index/$1/$2/$3');
-$routes->get('public-cover/(:segment)/(:segment)/(:num)/(:num)', 'PublicCover::newsByCategory/$1/$2/$3/$4');
+$routes->get('user/(:segment)/(:segment)/(:num)', 'PublicCover::index/$1/$2/$3');
+$routes->get('user/(:segment)/(:segment)/(:num)/(:num)', 'PublicCover::newsByCategory/$1/$2/$3/$4');

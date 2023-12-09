@@ -5,7 +5,7 @@
                 <h1 class="mb-1 font-weight-normal text-muted display-6">User Registration</h1>
                 <?= session()->getFlashdata('error') ?>
                 <?= validation_list_errors() ?>
-                <?= form_open('users/index/' . $role['id'], ['class' => 'form-inline', 'role' => 'form', 'id' => 'registerForm']); ?>
+                <form action="<?= site_url('user/index/' . $role['id']); ?>" class="form-inline" role="form" id="registerForm" method="POST">
                     <?= csrf_field() ?>
                     <div class="form-group mb-4">
                         <hr class="hr-light">
@@ -59,7 +59,7 @@
                     <div class="form-group mt-3 pt-2 col-3">
                         <input type="submit" class="btn btn-secondary" id="btnSubmit" value="Sign Up">
                     </div>
-                <?= form_close(); ?>
+                </form>
                 <div class="mt-2">
                     <p>Already have an account? <a href="<?= site_url('/') ?>" class="link-primary">Login here!</a></p>
                 </div>

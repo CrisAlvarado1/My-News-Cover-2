@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Controllers\BaseNewsController;
 use App\Models\NewsModel;
 use App\Models\NewsSourcesModel;
 use App\Models\NewsTagsModel;
@@ -85,9 +86,10 @@ class News extends BaseController
      */
     private function loadCommonData($categoryId = null)
     {
-        $data['title']      = 'My Cover';
-        $data['largeTitle'] = 'Your Unique News Cover';
-        $data['filters']    = $this->newsSourcesModel->getDistinctCategoriesByUserId($this->userId);
+        $data['title']         = 'My Cover';
+        $data['largeTitle']    = 'Your Unique News Cover';
+        $data['filters']       = $this->newsSourcesModel->getDistinctCategoriesByUserId($this->userId);
+        $data['routeCategory'] = 'users/news/index';
 
         if ($categoryId === null) {
             $data['tags'] = $this->newsTagsModel->getNewsTagsByUser($this->userId);
@@ -174,7 +176,7 @@ class News extends BaseController
      */
     public function filterNewsByTagsInAllNews()
     {
-        $tagsSelected = $this->request->getGet('tagsNews');
+        $tagsSelected = $this->request->getPost('tagsNews');
 
         if (!empty($tagsSelected)) {
             $data                 = $this->loadCommonData();
@@ -194,7 +196,7 @@ class News extends BaseController
      */
     public function filterNewsByTagsInCategoryNews($categoryId)
     {
-        $tagsSelected = $this->request->getGet('tagsNews');
+        $tagsSelected = $this->request->getPost('tagsNews');
 
         if (!empty($tagsSelected)) {
             $data                 = $this->loadCommonData($categoryId);
@@ -270,7 +272,7 @@ class News extends BaseController
     {
         $nameUser     = session()->get('name');
         $lastNameUser = session()->get('lastName');
-        $link         = 'http://mynewscover2.com/index.php/public-cover/' .
+        $link         = 'http://mynewscover2.com/user/' .
             $nameUser . '/' . $lastNameUser . '/' . $this->userId . '';
         return $link;
     }
