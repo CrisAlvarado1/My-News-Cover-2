@@ -31,6 +31,11 @@ class BaseNewsController extends BaseController
     public $newsTagsModel;
 
     /**
+     * @var int ID of the current user.
+     */
+    protected $userId;
+
+    /**
      * Class constructor.
      */
     public function __construct()
@@ -38,23 +43,48 @@ class BaseNewsController extends BaseController
         $this->newsSourcesModel = model(NewsSourcesModel::class);
         $this->newsModel        = model(NewsModel::class);
         $this->userModel        = model(UserModel::class);
-        $this->newsTagsModel    = Model(NewsTagsModel::class);
+        $this->newsTagsModel    = model(NewsTagsModel::class);
+        $this->userId           = session()->get('user_id') ?? null;
     }
 
-    public function loadTags($data, $userId, $categoryId = null)
-    {
-        if ($categoryId === null) {
-            $data['tags'] = $this->newsTagsModel->getNewsTagsByUser($userId);
-        } else {
-            $data['tags'] = $this->newsTagsModel->getNewsTagsByUser($userId, $categoryId);
-        }
-
-        return $data;
-    }
-
-    public function renderNews($data)
+    /**
+     * Send to render the index page of the news area
+     * 
+     * @return string Rendered HTML content for the admin index page. 
+     */
+    public function renderNewsPage($data)
     {
         $content = view('users/news/index', $data);
         return parent::renderTemplate($content, $data);
+    }
+
+    /**
+     * Retrieve all relationed news by unique identificator user.
+     * 
+     * @param array $data An associative array containing additional data.
+     * @param int   $userId The unique identifier of the user.
+     * 
+     * @return array A associative array of different data and with the all news.
+     */
+    public function getAllNews($data, $userId)
+    {
+        $data['allNews'] = $this->newsModel->getNews($userId);
+        return $data;
+    }
+
+    /**
+     * Retrieve all news related to a unique user and category identifier.
+     *
+     * @param array $data An associative array containing additional data.
+     * @param int   $userId The unique identifier of the user.
+     * @param int   $categoryId The unique identifier of the category.
+     * 
+     * @return array An associative array with various data and all related news.
+     */
+    public function getNewsByCategory($data, $userId, $categoryId)
+    {
+        $data['allNews']    = $this->newsModel->getNews($userId, $categoryId);
+        $data['categoryId'] = $categoryId;
+        return $data;
     }
 }

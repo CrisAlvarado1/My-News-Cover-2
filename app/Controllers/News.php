@@ -2,46 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
 use App\Controllers\BaseNewsController;
-use App\Models\NewsModel;
-use App\Models\NewsSourcesModel;
-use App\Models\NewsTagsModel;
 use App\Models\UserModel;
 
-class News extends BaseController
+class News extends BaseNewsController
 {
-    /**
-     * @var NewsSourcesModel News Sources Model.
-     */
-    protected $newsSourcesModel;
-
-    /**
-     * @var NewsModel News Model.
-     */
-    protected $newsModel;
-
-    /**
-     * @var NewsTagsModel News Tags Model.
-     */
-    protected $newsTagsModel;
-
-    /**
-     * @var int ID of the current user.
-     */
-    protected $userId;
-
-    /**
-     * Class constructor.
-     */
-    public function __construct()
-    {
-        $this->newsSourcesModel = Model(NewsSourcesModel::class);
-        $this->newsModel        = Model(NewsModel::class);
-        $this->newsTagsModel    = Model(NewsTagsModel::class);
-        $this->userId           = session()->get('user_id');
-    }
-
     /**
      * Displays the main news page.
      * 
@@ -49,11 +14,11 @@ class News extends BaseController
      */
     public function index()
     {
-        $data            = $this->loadCommonData();
-        $data['allNews'] = $this->newsModel->getNews($this->userId);
+        $data = $this->loadCommonData();
+        $data = parent::getAllNews($data, $this->userId);
 
         if ($this->validateExistsNews($data['allNews'])) {
-            $this->renderNews($data);
+            return parent::renderNewsPage($data);
         } else {
             return redirect()->to('users/newsSources/create');
         }
@@ -62,15 +27,17 @@ class News extends BaseController
     /**
      * Displays the main news page filter by category
      * 
+     * @param int   $categoryId The unique identifier of the category.
+     * 
      * @return \CodeIgniter\HTTP\RedirectResponse|\CodeIgniter\HTTP\Response View or redirection.
      */
     public function filterNewsByCategory($categoryId)
     {
-        $data            = $this->loadCommonData($categoryId);
-        $data['allNews'] = $this->newsModel->getNews($this->userId, $categoryId);
+        $data = $this->loadCommonData($categoryId);
+        $data = parent::getNewsByCategory($data, $this->userId, $categoryId);
 
         if ($this->validateExistsNews($data['allNews'])) {
-            $this->renderNews($data);
+            return parent::renderNewsPage($data);
         } else {
             return redirect()->to('users/newsSources/create');
         }
@@ -103,18 +70,20 @@ class News extends BaseController
 
     /**
      * Searches for keywords in all news and renders the result.
+     *
+     * @return string Rendered template content with search results.
      */
     public function searchInAllNews()
     {
-        $keywords        = $this->request->getVar('keywords');
-        $data            = $this->loadCommonData();
-        $data['allNews'] = $this->newsModel->getNews($this->userId);
+        $keywords = $this->request->getVar('keywords');
+        $data     = $this->loadCommonData();
+        $data     = parent::getAllNews($data, $this->userId);
 
         if (!empty($keywords)) {
             $data['allNews']      = $this->searchNewsWithKeywords($data, $keywords);
             $data['dataKeywords'] = $keywords;
         }
-        $this->renderNews($data);
+        return parent::renderNewsPage($data);
     }
 
     /**
@@ -124,15 +93,15 @@ class News extends BaseController
      */
     public function searchInCategoryNews($categoryId)
     {
-        $keywords        = $this->request->getVar('keywords');
-        $data            = $this->loadCommonData($categoryId);
-        $data['allNews'] = $this->newsModel->getNews($this->userId, $categoryId);
+        $keywords = $this->request->getVar('keywords');
+        $data     = $this->loadCommonData($categoryId);
+        $data     = parent::getNewsByCategory($data, $this->userId, $categoryId);
 
         if (!empty($keywords)) {
             $data['allNews']      = $this->searchNewsWithKeywords($data, $keywords);
             $data['dataKeywords'] = $keywords;
         }
-        $this->renderNews($data);
+        return parent::renderNewsPage($data);
     }
 
     /**
@@ -161,18 +130,10 @@ class News extends BaseController
     }
 
     /**
-     * Send to render the index page of the news area
-     * 
-     * @return string Rendered HTML content for the admin index page. 
-     */
-    private function renderNews($data)
-    {
-        $content = view('users/news/index', $data);
-        return parent::renderTemplate($content, $data);
-    }
-
-    /**
      * Filters all news by selected tags and renders the result.
+     * 
+     * If tags are selected, it loads common data, retrieves news based on the selected tags,
+     * and renders the news page. Otherwise, it redirects to the default news index page.
      */
     public function filterNewsByTagsInAllNews()
     {
@@ -183,7 +144,7 @@ class News extends BaseController
             $data['tagsSelected'] = $tagsSelected;
             $data['allNews']      = $this->newsModel->getNewsByTags($tagsSelected, $this->userId);
 
-            $this->renderNews($data);
+            return parent::renderNewsPage($data);
         } else {
             return redirect()->to('users/news/index');
         }
@@ -193,6 +154,8 @@ class News extends BaseController
      * Filters news of a specific category by selected tags and renders the result.
      *
      * @param int $categoryId The ID of the category to filter by.
+     * 
+     * @return string Rendered template content or redirects back to filter news by category.
      */
     public function filterNewsByTagsInCategoryNews($categoryId)
     {
@@ -203,7 +166,7 @@ class News extends BaseController
             $data['tagsSelected'] = $tagsSelected;
             $data['allNews']      = $this->newsModel->getNewsByTags($tagsSelected, $this->userId, $categoryId);
 
-            $this->renderNews($data);
+            return parent::renderNewsPage($data);
         } else {
             $this->filterNewsByCategory($categoryId);
         }
@@ -234,7 +197,7 @@ class News extends BaseController
         if ($data['isPublic']) {
             $data['accessLink'] = $this->buildPublicCoverLink();
         }
-        $content          = view('users/news/public', $data);
+        $content = view('users/news/public', $data);
         return parent::renderTemplate($content, $data);
     }
 
