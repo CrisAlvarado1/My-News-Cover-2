@@ -1,14 +1,9 @@
 <nav class="navbar navbar-expand-lg p-md-3 background-color sticky-top">
     <div class="container">
-        <!-- Link to Dashboard for Users or Categories Management for Admins -->
-        <a href="<?php /*echo ($_SESSION['user']['role_name'] === "user") ? "/dashboard.php" : "/admin/categories.php";*/ ?>">
-            <img src="/images/general/logo.png" alt="Logo" class="logo">
-        </a>
+        <img src="/images/general/logo.png" alt="Logo" class="logo">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-                </svg>
+            <span class="text-muted">
+                <i class="fa-solid fa-bars"></i>
             </span>
         </button>
         <?php if (!isset($userCover)) { ?>

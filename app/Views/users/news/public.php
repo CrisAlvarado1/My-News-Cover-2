@@ -11,9 +11,11 @@
     <div class="container mt-5 text-center">
         <!-- Show the link of the public cover -->
         <?php if (isset($accessLink)) : ?>
-            <div class="alert alert-success" role="alert">
+            <div class="alert alert-success text-center" role="alert">
                 <span>Cover published successfully! Share the link:</span>
-                <a href="<?= $accessLink ?>" class="alert-link" target="_blank"><?= $accessLink ?></a>
+                <a href="<?= $accessLink ?>" class="alert-link text-break d-block mt-2" target="_blank">
+                    <?= $accessLink ?>
+                </a>
             </div>
         <?php endif; ?>
 

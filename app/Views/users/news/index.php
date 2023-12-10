@@ -37,37 +37,45 @@
     <section class="mt-4">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-11">
+                <div class="col-md-12">
                     <div class="card border-0">
                         <div class="card-body">
-                            <h3 class="card-title text-center h5">Filter by Tags</h3>
+                            <h3 class="card-title text-center h5">
+                                <a class="text-muted text-decoration-none" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    Filter by Tags
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                    <i class="fa-solid fa-arrow-down"></i>
+                                </a>
+                            </h3>
                             <?php $category = (isset($categoryId)) ? "/" . $categoryId : '' ?>
-                            <form action="<?= site_url('users/news/index/tags' . $category) ?>" method="post">
-                                <div class="row border">
-                                    <!-- Generates filters based on the news's related tags -->
-                                    <?php foreach ($tags as $tag) : ?>
-                                        <div class="col-md-3 mb-1">
-                                            <div class="form-check">
-                                                <?php
-                                                // Determine whether the current tag is selected based on the tagsSelected array
-                                                $checked = '';
-                                                if (isset($tagsSelected))
-                                                    $checked = (in_array($tag['tag_id'], $tagsSelected)) ? 'checked="checked"' : '';
-                                                ?>
-                                                <!-- Checkbox input for the tag with dynamic ID and value -->
-                                                <input class="form-check-input" type="checkbox" name="tagsNews[]" value="<?= $tag['tag_id'] ?>" id="tag<?= $tag['tag_id'] ?>" <?= $checked ?>>
-                                                <!-- Label for the checkbox displaying the tag name -->
-                                                <label class="form-check-label" for="tag<?= $tag['tag_id'] ?>">
-                                                    <?= $tag['name_tag']; ?>
-                                                </label>
+                            <div class="collapse" id="collapseExample">
+                                <form action="<?= site_url('users/news/index/tags' . $category) ?>" method="post">
+                                    <div class="row border">
+                                        <!-- Generates filters based on the news's related tags -->
+                                        <?php foreach ($tags as $tag) : ?>
+                                            <div class="col-md-3 mb-1">
+                                                <div class="form-check">
+                                                    <?php
+                                                    // Determine whether the current tag is selected based on the tagsSelected array
+                                                    $checked = '';
+                                                    if (isset($tagsSelected))
+                                                        $checked = (in_array($tag['tag_id'], $tagsSelected)) ? 'checked="checked"' : '';
+                                                    ?>
+                                                    <!-- Checkbox input for the tag with dynamic ID and value -->
+                                                    <input class="form-check-input" type="checkbox" name="tagsNews[]" value="<?= $tag['tag_id'] ?>" id="tag<?= $tag['tag_id'] ?>" <?= $checked ?>>
+                                                    <!-- Label for the checkbox displaying the tag name -->
+                                                    <label class="form-check-label" for="tag<?= $tag['tag_id'] ?>">
+                                                        <?= $tag['name_tag']; ?>
+                                                    </label>
+                                                </div>
                                             </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-secondary mt-3">Apply Filters</button>
-                                </div>
-                            </form>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-secondary mt-3">Apply Filters</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
