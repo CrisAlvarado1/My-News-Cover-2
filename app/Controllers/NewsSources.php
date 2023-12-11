@@ -9,8 +9,6 @@ use App\Models\NewsSourcesModel;
 
 class NewsSources extends BaseController
 {
-    protected $filters = ['auth'];
-
     /**
      * Displays the list of news sources associated with the current user.
      * Redirects to create page if no news sources exist.
@@ -85,6 +83,7 @@ class NewsSources extends BaseController
      */
     public function save()
     {
+        // First validate the user input
         $validation       = \Config\Services::validation();
         $newsSourcesModel = Model(NewsSourcesModel::class);
         $newsModel        = Model(NewsModel::class);
@@ -108,6 +107,7 @@ class NewsSources extends BaseController
             return redirect()->to($route)->withInput()->with('errors', $validation->getErrors());
         }
 
+        // Later, identification if has $id is an update, if not have a id it´s a insert
         if ($id) {
             $newsSourcesModel->update($id, $data);
             $newsModel->set('category_id', $data['category_id'])->where('news_source_id', $id)->update();

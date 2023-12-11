@@ -9,8 +9,6 @@ use App\Models\NewsModel;
 
 class Category extends BaseController
 {
-    protected $filters = ['auth'];
-
     /**
      * Display the index page for managing categories in the admin area.
      *  

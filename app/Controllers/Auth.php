@@ -17,7 +17,8 @@ class Auth extends BaseController
      */
     public function authenticate()
     {
-        $validation = \Config\Services::validation();
+        // First validate values of the request
+        $validation    = \Config\Services::validation();
         $validation->setRules([
             'email'    => 'required|valid_email',
             'password' => 'required',
@@ -27,18 +28,19 @@ class Auth extends BaseController
             return redirect()->to('/')->withInput()->with('errors', $validation->getErrors());
         }
 
+        //Later get the values and get the data user
         $userModel    = model(UserModel::class);
         $userEmail    = $this->request->getVar('email');
         $userPassword = $this->request->getVar('password');
+        $user         = $userModel->getByEmail($userEmail);
 
-        $user = $userModel->getByEmail($userEmail);
-
+        // Validate if user exist and the password is correct
         if (!$user || $userPassword !== $user['password']) {
             return redirect()->to('/')->with('error', 'Invalid email or password');
         }
-
         $data['session'] = $this->setSession($user);
 
+        // Validates if the user is admin or normal user
         if ($userModel->isAdmin($user['id'])) {
             return redirect()->to('admin/index');
         } else {

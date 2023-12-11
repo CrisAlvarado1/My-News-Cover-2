@@ -58,7 +58,7 @@ class PublicCover extends BaseNewsController
      */
     private function validateIsPublic($userId)
     {
-        $isPublic           = $this->userModel->select('is_public')->where('id', $userId)
+        $isPublic = $this->userModel->select('is_public')->where('id', $userId)
             ->first()['is_public'] ?? false;
 
         if ($isPublic) {

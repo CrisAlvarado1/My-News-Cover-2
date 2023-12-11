@@ -37,7 +37,7 @@ if ($argc > 0) {
         }
     }
 
-    // Deletes all the old news, to avoid the repeat of news
+    // Deletes all the old news and old tags, to avoid the repeat
     deleteAllRecords($conn, 'news');
     deleteAllRecords($conn, 'tags');
     deleteAllRecords($conn, 'news_tags');
@@ -274,7 +274,13 @@ function insertNews($conn, $specificNews)
     $stmt->execute();
     return $stmt->insert_id;
 }
-// REVISAR EL PORQUE NO LLEGAN TODAS LAS ETIQUETAS...
+
+/** Extracts and returns an array of tags from the given item.
+*
+* @param mixed $item The item with the news information from which to extract tags.
+*
+* @return array An array containing the tags extracted from the item.
+*/
 function getTags($item)
 {
     $categories = [];

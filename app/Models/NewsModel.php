@@ -87,6 +87,7 @@ class NewsModel extends Model
         }
 
         $query->groupBy('n.id');
+        $query->orderBy('n.date', 'DESC');
         return $query->get()->getResultArray();
     }
 }

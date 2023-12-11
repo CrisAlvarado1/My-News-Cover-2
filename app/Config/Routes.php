@@ -42,6 +42,6 @@ $routes->post('users/newsSources/save', 'NewsSources::save');
 $routes->get('users/newsSources/edit/(:num)', 'NewsSources::edit/$1');
 $routes->get('users/newsSources/delete/(:num)', 'NewsSources::delete/$1');
 
-// Route for the public "Portada"
+// Routes for the public "Portada"
 $routes->get('user/(:segment)/(:segment)/(:num)', 'PublicCover::index/$1/$2/$3');
 $routes->get('user/(:segment)/(:segment)/(:num)/(:num)', 'PublicCover::newsByCategory/$1/$2/$3/$4');

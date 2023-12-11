@@ -40,7 +40,7 @@
                 </div>
             <?php endif; ?>
 
-            <div class="form-group mt-5">
+            <div class="form-group mt-4 mb-2">
                 <button type="submit" class="btn btn-secondary">
                     <?= ($isPublic) ? 'Make Private' : 'Make Public' ?>
                 </button>

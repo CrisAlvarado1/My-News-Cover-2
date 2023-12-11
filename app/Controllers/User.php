@@ -38,6 +38,17 @@ class User extends BaseController
      */
     public function store($roleId)
     {
+        // First validate the important fields
+        $validation    = \Config\Services::validation();
+        $validation->setRules([
+            'email'    => 'required|valid_email',
+            'password' => 'required|min_length[8]',
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->to('users/index')->withInput()->with('error', $validation->getErrors());
+        }
+
         $userModel    = model(UserModel::class);
         $addressModel = model(AddressModel::class);
 
@@ -50,7 +61,9 @@ class User extends BaseController
             'phone_number' => $this->request->getVar('phone')
         ];
 
+        // Validate if the email already exist or not
         if (!$userModel->isEmailExists($userData['email'])) {
+            // Insert the user data
             $userId = $userModel->insert($userData);
 
             if ($userId) {
@@ -62,10 +75,10 @@ class User extends BaseController
                     'city'        => $this->request->getVar('city'),
                     'postal_code' => $this->request->getVar('postalCode')
                 ];
+                // Insert de address data relationated with the user
                 $addressModel->insert($addressData);
-
+                // Send the email to confirm the user
                 $this->sendEmailToUser($userData['email']);
-
                 return redirect()->to('/')->with('error', 'Successfully registered');
             } else {
                 return redirect()->to('users/index')->with('error', 'Database problems, try again');

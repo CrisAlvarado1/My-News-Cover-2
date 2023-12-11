@@ -15,7 +15,7 @@
                         </div>
                     </div>
                     <div class="form-group mt-3 pt-2 col-3">
-                        <input type="submit" class="btn btn-secondary" value="Add New">
+                        <input type="submit" class="btn btn-secondary" value="Save">
                     </div>
                 </form>
             </div>

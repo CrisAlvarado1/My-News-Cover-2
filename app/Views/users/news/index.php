@@ -47,7 +47,7 @@
                                 <div class="row border">
                                     <!-- Generates filters based on the news's related tags -->
                                     <?php foreach ($tags as $tag) : ?>
-                                        <div class="col-md-3 mb-1">
+                                        <div class="col-md-2 mb-1">
                                             <div class="form-check">
                                                 <?php
                                                 // Determine whether the current tag is selected based on the tagsSelected array
