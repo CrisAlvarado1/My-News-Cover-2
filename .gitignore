@@ -7,4 +7,3 @@ debugbar/*
 !debugbar/.gitkeep
 logs/*
 !logs/.gitkeep
-newsGrabber.php

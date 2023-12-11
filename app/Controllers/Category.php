@@ -21,6 +21,8 @@ class Category extends BaseController
         $categoryModel      = Model(CategoryModel::class);
         $data['title']      = 'Categories';
         $data['categories'] = $categoryModel->findAll();
+        $data['script']     = '<script src="' . base_url('js/confirmDelete.js') . '"></script>';
+        $data['script2']    = '<script src="' . base_url('js/alerts.js') . '"></script>';
         $content            = view('admin/index', $data);
 
         return parent::renderTemplate($content, $data);

@@ -13,9 +13,10 @@
         <?php if (isset($accessLink)) : ?>
             <div class="alert alert-success text-center" role="alert">
                 <span>Cover published successfully! Share the link:</span>
-                <a href="<?= $accessLink ?>" class="alert-link text-break d-block mt-2" target="_blank">
+                <a href="<?= $accessLink ?>" class="alert-link text-break d-block mt-2 mb-2" target="_blank" id="accessLink">
                     <?= $accessLink ?>
                 </a>
+                <button class="btn" id="copyButton"><i class="fa-solid fa-copy"></i></button>
             </div>
         <?php endif; ?>
 

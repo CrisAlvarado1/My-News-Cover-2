@@ -40,4 +40,3 @@
         </div>
     </div>
 </section>
-<script src="/js/confirmDelete.js"></script>

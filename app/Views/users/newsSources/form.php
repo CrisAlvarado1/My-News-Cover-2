@@ -32,11 +32,10 @@
                         </div>
                     </div>
                     <div class="form-group mt-3 pt-2 col-3">
-                        <input type="submit" class="btn btn-secondary" value="Add New">
+                        <input type="submit" id="submitButton" class="btn btn-secondary" value="Add New">
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </section>
-<script src="/js/validateNewsSources.js"></script>

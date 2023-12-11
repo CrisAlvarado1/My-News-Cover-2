@@ -17,7 +17,7 @@ class News extends BaseNewsController
         $data = $this->loadCommonData();
         $data = parent::getAllNews($data, $this->userId);
 
-        if ($this->validateExistsNews($data['allNews'])) {
+        if ($this->validateExistsNewsSources($data['filters'])) {
             return parent::renderNewsPage($data);
         } else {
             return redirect()->to('users/newsSources/create');
@@ -36,7 +36,7 @@ class News extends BaseNewsController
         $data = $this->loadCommonData($categoryId);
         $data = parent::getNewsByCategory($data, $this->userId, $categoryId);
 
-        if ($this->validateExistsNews($data['allNews'])) {
+        if ($this->validateExistsNewsSources($data['filters'])) {
             return parent::renderNewsPage($data);
         } else {
             return redirect()->to('users/newsSources/create');
@@ -57,6 +57,7 @@ class News extends BaseNewsController
         $data['largeTitle']    = 'Your Unique News Cover';
         $data['filters']       = $this->newsSourcesModel->getDistinctCategoriesByUserId($this->userId);
         $data['routeCategory'] = 'users/news/index';
+        $data['script']        = '<script src="' . base_url('js/filter.js') . '"></script>';
 
         if ($categoryId === null) {
             $data['tags'] = $this->newsTagsModel->getNewsTagsByUser($this->userId);
@@ -179,7 +180,7 @@ class News extends BaseNewsController
      *
      * @return bool True if news exists, false otherwise.
      */
-    private function validateExistsNews($news)
+    private function validateExistsNewsSources($news)
     {
         return !empty($news);
     }
@@ -196,6 +197,7 @@ class News extends BaseNewsController
         $data['isPublic'] = $userModel->select('is_public')->where('id', $this->userId)->first()['is_public'] ?? false;
         if ($data['isPublic']) {
             $data['accessLink'] = $this->buildPublicCoverLink();
+            $data['script']   = '<script src="' . base_url('js/copyToClipboard.js') . '"></script>';
         }
         $content = view('users/news/public', $data);
         return parent::renderTemplate($content, $data);
@@ -217,6 +219,7 @@ class News extends BaseNewsController
         if (!empty($confirm) && empty($disconfirm)) {
             $userModel->where('id', $this->userId)->set(['is_public' => true])->update();
             $data['accessLink'] = $this->buildPublicCoverLink();
+            $data['script']   = '<script src="' . base_url('js/copyToClipboard.js') . '"></script>';
         } else {
             $userModel->where('id', $this->userId)->set(['is_public' => false])->update();
         }

@@ -23,6 +23,7 @@ class NewsSources extends BaseController
         $data['title']       = 'News Sources';
         $userId              = session()->get('user_id');
         $data['newsSources'] = $newsSourcesModel->getNewsSourcesByUserId($userId);
+        $data['script']      = '<script src="' . base_url('js/confirmDelete.js') . '"></script>';
 
         if ($this->validateExistsNewsSources($data['newsSources'])) {
             $content = view('users/newsSources/index', $data);
@@ -45,6 +46,7 @@ class NewsSources extends BaseController
         $data['actionTitle'] = 'Create News Sources';
         $data['categories']  = $categoryModel->findAll();
         $content             = view('users/newsSources/form', $data);
+        $data['script']      = '<script src="' . base_url('js/validateNewsSources.js') . '"></script>';
 
         return parent::renderTemplate($content, $data);
     }
@@ -66,6 +68,7 @@ class NewsSources extends BaseController
         $data['actionTitle'] = 'Edit News Sources';
         $data['categories']  = $categoryModel->findAll();
         $data['newsSource']  = $newsSourcesModel->where('id', $id)->first();
+        $data['script']      = '<script src="' . base_url('js/validateNewsSources.js') . '"></script>';
 
         if ($this->validateExistsNewsSources($data['newsSource'])) {
             $content = view('users/newsSources/form', $data);
@@ -84,7 +87,9 @@ class NewsSources extends BaseController
     {
         $validation       = \Config\Services::validation();
         $newsSourcesModel = Model(NewsSourcesModel::class);
+        $newsModel        = Model(NewsModel::class);
         $id               = $this->request->getVar('id');
+
         $data             = [
             'name'        => $this->request->getVar('name'),
             'url'         => $this->request->getVar('url'),
@@ -105,6 +110,7 @@ class NewsSources extends BaseController
 
         if ($id) {
             $newsSourcesModel->update($id, $data);
+            $newsModel->set('category_id', $data['category_id'])->where('news_source_id', $id)->update();
         } else {
             $newsSourcesModel->insert($data);
         }

@@ -36,5 +36,3 @@
         <a class="btn btn-secondary px-5" href="<?php echo site_url('admin/create') ?>" role="button">Add new</a>
     </div>
 </div>
-<script src="/js/confirmDelete.js"></script>
-<script src="/js/alerts.js"></script>
